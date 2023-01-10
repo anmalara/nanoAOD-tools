@@ -101,6 +101,9 @@ drop Jet_btagCMVA
 drop Jet_genJetIdx
 drop Jet_mass*
 
+keep nPFCand
+keep PFCand_*
+
 keep SoftActivity*
 keep fixedGridRho*
 
