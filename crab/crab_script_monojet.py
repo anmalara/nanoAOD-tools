@@ -94,19 +94,19 @@ def main():
     branchsel = "keep_and_drop_monojet.txt"
 
     if options['nofilter']:
-        common_modules = []
         selectors = []
         mc_selectors = []
-        trigger_selector = []
     else:
-        triggerfile = 'triggers_nano_v5.txt'
-        trigger_selector = [triggerSelector(triggerfile)]
-        common_modules = [monojetPost()]
-
         if options['year'] == '2016' and not options['ismc']:
             jetsorter = lambda x: x.pt
         else:
             jetsorter = lambda x: x.pt_nom
+        
+        # We'll sort PF candidates by their pt
+        pfcandsorter = lambda x: x.pt
+
+        # Sort AK4 and AK8 jets by their pt
+        # Also sort PF candidates by their pt, and take the first 500 (max)
         selectors = [
             # collectionMerger(input=["Jet"],output="Jet", selector={"Jet" : lambda x : variation_safe_pt_cut(x,19.9)}),
             # collectionMerger(input=["FatJet"],output="FatJet", selector={"FatJet" : lambda x : variation_safe_pt_cut(x,150.0)}),
@@ -115,8 +115,10 @@ def main():
             # collectionMerger(input=["Photon"],output="Photon", selector={"Photon" : filter_photons}),
             collectionMerger(input=["Jet"],output="Jet",sortkey=jetsorter),
             collectionMerger(input=["FatJet"],output="FatJet",sortkey=jetsorter),
+            collectionMerger(input=["PFCand"],output="PFCand",sortkey=pfcandsorter, maxObjects=500),
         ]
 
+        # Selections on GEN jets and particles
         mc_selectors = [
             collectionMerger(input=["GenPart"],output="GenPart", selector={"GenPart" : filter_genpart}),
             collectionMerger(input=["GenJet"],output="GenJet", selector={"GenJet" : lambda x : x.pt>20}),
@@ -176,7 +178,7 @@ def main():
             pu_modules = [ puAutoWeight_2018() ]
             pref_modules = []
 
-        modules = trigger_selector + jme_modules + common_modules + pu_modules + pref_modules+ selectors + mc_selectors
+        modules = jme_modules + pu_modules + pref_modules + selectors + mc_selectors
         p = PostProcessor(
             outputDir=".",
             inputFiles=files,
@@ -202,7 +204,7 @@ def main():
                                                     )()
                                     )
 
-        modules = trigger_selector + jme_modules + common_modules + selectors
+        modules = jme_modules + selectors
         p=PostProcessor(outputDir=".",
             inputFiles=files,
             outputbranchsel=branchsel,
