@@ -92,15 +92,15 @@ def short_name(dataset):
         name = name + "_" + run
     return name
 
-tag = "ULv8_05Feb21"
+# Define the tag for this submission
+tag = "PFNANO_03Feb23_v2_PostNanoTools"
 dataset = get_dataset()
 name = short_name(dataset)
 config = base_configuration()
 
 
 ### Determine what to do based on type of dataset
-# "USER" is for private samples produced by Laurent
-is_mc = dataset.endswith("SIM") or dataset.endswith("USER")
+is_mc = dataset.endswith("SIM") or "13TeV" in dataset
 crab_script = "crab_script_monojet.py"
 
 
@@ -121,7 +121,6 @@ if not is_mc:
 
 config.JobType.inputFiles.append(crab_script)
 config.JobType.inputFiles.append('keep_and_drop_monojet.txt')
-config.JobType.inputFiles.append('triggers_nano_v5.txt')
 
 # Pass the dataset name as an argument so that
 # the script can write it into the output files.
@@ -141,7 +140,7 @@ else:
 
 config.Data.outputDatasetTag = name
 
-# Laurent's samples are NOT in the global DB instance, look at "phys03" for these
+# Look at phys03 DB for custom PFNANO samples
 if dataset.endswith("USER"):
     config.Data.inputDBS = "phys03"
 
@@ -151,7 +150,7 @@ import socket
 host = socket.gethostname()
 if 'lxplus' in host:
     config.Site.storageSite = "T2_CH_CERN"
-    config.Data.outLFNDirBase = '/store/group/phys_exotica/monojet/aalbert/nanopost/{1}/'.format(getUsernameFromSiteDB(),tag)
+    config.Data.outLFNDirBase = '/store/group/phys_higgs/vbfhiggs/{0}/'.format(tag)
 elif 'lpc' in host:
     config.Site.storageSite = "T3_US_FNALLPC"
     config.Data.outLFNDirBase = '/store/user/aakpinar/nanopost/{0}/'.format(tag)
