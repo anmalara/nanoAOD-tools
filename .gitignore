@@ -8,3 +8,14 @@ build
 *.d
 *.so
 *.pcm
+
+# CRAB working directory, ignore
+wdir/
+crab.log
+
+# Test ROOT file outputs
+tree*.root
+*Skim.root
+
+# XML job reports
+FrameworkJobReport.xml
