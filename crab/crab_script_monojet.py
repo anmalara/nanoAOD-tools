@@ -8,9 +8,6 @@ from PhysicsTools.NanoAODTools.postprocessing.framework.postprocessor import *
 from PhysicsTools.NanoAODTools.postprocessing.framework.crabhelper import inputFiles,runsAndLumis, addDatasetTag
 
 from PhysicsTools.NanoAODTools.postprocessing.modules.common.puWeightProducer import *
-from PhysicsTools.NanoAODTools.postprocessing.modules.monojet.monojetpost import monojetPost, variation_safe_pt_cut
-from PhysicsTools.NanoAODTools.postprocessing.modules.monojet.triggerselector import triggerSelector
-
 from PhysicsTools.NanoAODTools.postprocessing.modules.jme.jetmetUncertainties import *
 from PhysicsTools.NanoAODTools.postprocessing.modules.common.PrefireCorr import PrefCorr
 from PhysicsTools.NanoAODTools.postprocessing.modules.common.collectionMerger import collectionMerger
@@ -18,16 +15,6 @@ from PhysicsTools.NanoAODTools.postprocessing.modules.common.puWeightProducer im
 from PhysicsTools.NanoAODTools.postprocessing.modules.jme.jetmetHelperRun2 import createJMECorrector
 
 import PSet
-
-def filter_electrons(electron):
-    return (electron.pt>9.9) and (electron.cutBased > 0)
-
-def filter_photons(photon):
-    if hasattr(photon, 'cutBasedBitmap'):
-        return photon.cutBasedBitmap > 0
-    if hasattr(photon, 'cutBased17Bitmap'):
-        return photon.cutBased17Bitmap > 0
-    return False
 
 def filter_genpart(genpart):
     good = False
@@ -41,9 +28,6 @@ def extract_period(dataset):
         raise RuntimeError("Could not extract run period from dataset: " + dataset)
     return m.groups()[0]
 
-def filter_muons(muon):
-    return (muon.pt>9.9) and (muon.looseId) and (muon.pfRelIso04_all < 0.4)
-
 def met_branch_name(year, jet_type, ulegacy=True):
     if (year == '2017') and (jet_type=='AK4PFchs'):
         if ulegacy:
@@ -54,9 +38,9 @@ def met_branch_name(year, jet_type, ulegacy=True):
         return "MET"
 
 jsons = {
-        '2016': "Cert_271036-284044_13TeV_ReReco_07Aug2017_Collisions16_JSON.txt",
-        '2017': "Cert_294927-306462_13TeV_EOY2017ReReco_Collisions17_JSON_v1.txt",
-        '2018': "Cert_314472-325175_13TeV_17SeptEarlyReReco2018ABC_PromptEraD_Collisions18_JSON.txt"
+    '2016': "Cert_271036-284044_13TeV_ReReco_07Aug2017_Collisions16_JSON.txt",
+    '2017': "Cert_294927-306462_13TeV_EOY2017ReReco_Collisions17_JSON_v1.txt",
+    '2018': "Cert_314472-325175_13TeV_17SeptEarlyReReco2018ABC_PromptEraD_Collisions18_JSON.txt"
 }
 
 def read_options():
@@ -108,17 +92,12 @@ def main():
         # Sort AK4 and AK8 jets by their pt
         # Also sort PF candidates by their pt, and take the first 500 (max)
         selectors = [
-            # collectionMerger(input=["Jet"],output="Jet", selector={"Jet" : lambda x : variation_safe_pt_cut(x,19.9)}),
-            # collectionMerger(input=["FatJet"],output="FatJet", selector={"FatJet" : lambda x : variation_safe_pt_cut(x,150.0)}),
-            # collectionMerger(input=["Muon"],output="Muon", selector={"Muon" : filter_muons}),
-            # collectionMerger(input=["Electron"],output="Electron", selector={"Electron" : filter_electrons}),
-            # collectionMerger(input=["Photon"],output="Photon", selector={"Photon" : filter_photons}),
             collectionMerger(input=["Jet"],output="Jet",sortkey=jetsorter),
             collectionMerger(input=["FatJet"],output="FatJet",sortkey=jetsorter),
             collectionMerger(input=["PFCand"],output="PFCand",sortkey=pfcandsorter, maxObjects=500),
         ]
 
-        # Selections on GEN jets and particles
+        # Selections on GEN jet and particle collections
         mc_selectors = [
             collectionMerger(input=["GenPart"],output="GenPart", selector={"GenPart" : filter_genpart}),
             collectionMerger(input=["GenJet"],output="GenJet", selector={"GenJet" : lambda x : x.pt>20}),
