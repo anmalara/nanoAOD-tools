@@ -88,11 +88,11 @@ def short_name(dataset):
         name = name + "_" + m.groups()[0]
     if 'new_pmx' in conditions:
         name = name + '_new_pmx'
-    if ('RunIISummer16' in conditions) or ("UL16" in conditions):
+    if ('RunIISummer16' in conditions) or ("UL16" in conditions) or ("2016" in conditions):
         name = name + "_2016"
-    elif ("RunIIFall17" in conditions) or ("UL17" in conditions):
+    elif ("RunIIFall17" in conditions) or ("UL17" in conditions) or ("2017" in conditions):
         name = name + "_2017"
-    elif ('RunIIAutumn18' in conditions) or ("UL18" in conditions):
+    elif ('RunIIAutumn18' in conditions) or ("UL18" in conditions) or ("2018" in conditions):
         name = name + "_2018"
 
     m = re.match(r"Run(\d+[A-Z]*)", conditions)
