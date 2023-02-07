@@ -52,6 +52,20 @@ def cut_string(string_in):
     ret = string_in[:90] + partial_hash[:10]
     return ret
 
+
+def determine_year(dataset):
+    if ("Summer16" in dataset) or ("Run2016" in dataset) or ("2016" in dataset):
+        year=2016
+    elif ("Run2017" in dataset) or ("Fall17" in dataset) or ("UL17" in dataset) or ("2017" in dataset):
+        year=2017
+    elif ("Autumn18" in dataset) or ("Run2018" in dataset) or ("UL18" in dataset) or ("2018" in dataset):
+        year=2018
+    else:
+        raise RuntimeError("Could not determine year for dataset: {}".format(dataset))
+    
+    return year
+
+
 def short_name(dataset):
     _, name, conditions, _ = dataset.split("/")
 
@@ -103,13 +117,9 @@ config = base_configuration()
 is_mc = dataset.endswith("SIM") or "13TeV" in dataset
 crab_script = "crab_script_monojet.py"
 
+# Determine dataset year
+year = determine_year(dataset)
 
-if ("Summer16" in dataset) or ("Run2016" in dataset):
-    year=2016
-elif ("Run2017" in dataset) or ("Fall17" in dataset) or ("UL17" in dataset):
-    year=2017
-if ("Autumn18" in dataset) or ("Run2018" in dataset) or ("UL18" in dataset):
-    year=2018
 
 if not is_mc:
     if year==2016:
