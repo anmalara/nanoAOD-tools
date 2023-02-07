@@ -93,7 +93,7 @@ def short_name(dataset):
     return name
 
 # Define the tag for this submission
-tag = "PFNANO_03Feb23_v2_PostNanoTools"
+tag = "PFNANO_05Feb23_PostNanoTools"
 dataset = get_dataset()
 name = short_name(dataset)
 config = base_configuration()
