@@ -25,4 +25,4 @@ submit_dataset_list(){
     done < $LIST
 }
 
-submit_dataset_list "datasets_ULv8.txt"
+submit_dataset_list "datasets_PFNANO_05Feb23.txt"
