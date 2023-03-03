@@ -120,15 +120,6 @@ crab_script = "crab_script_monojet.py"
 # Determine dataset year
 year = determine_year(dataset)
 
-
-if not is_mc:
-    if year==2016:
-        config.JobType.inputFiles.append("input/json/Cert_271036-284044_13TeV_ReReco_07Aug2017_Collisions16_JSON.txt")
-    elif year==2017:
-        config.JobType.inputFiles.append("input/json/Cert_294927-306462_13TeV_EOY2017ReReco_Collisions17_JSON_v1.txt")
-    elif year==2018:
-        config.JobType.inputFiles.append("input/json/Cert_314472-325175_13TeV_17SeptEarlyReReco2018ABC_PromptEraD_Collisions18_JSON.txt")
-
 config.JobType.inputFiles.append(crab_script)
 config.JobType.inputFiles.append('keep_and_drop_monojet.txt')
 

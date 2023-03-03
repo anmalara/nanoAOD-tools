@@ -37,12 +37,6 @@ def met_branch_name(year, jet_type, ulegacy=True):
     else:
         return "MET"
 
-jsons = {
-    '2016': "Cert_271036-284044_13TeV_ReReco_07Aug2017_Collisions16_JSON.txt",
-    '2017': "Cert_294927-306462_13TeV_EOY2017ReReco_Collisions17_JSON_v1.txt",
-    '2018': "Cert_314472-325175_13TeV_17SeptEarlyReReco2018ABC_PromptEraD_Collisions18_JSON.txt"
-}
-
 def read_options():
     # Loop over input arguments
     options = {}
@@ -165,7 +159,9 @@ def main():
             modules=modules,
             provenance=True,
             maxEntries=maxEntries,
-            fwkJobReport=True)
+            fwkJobReport=True
+        )
+    
     else:
         jme_modules = []
         if options['year']=='2018' or options['year']=='2017':
@@ -190,8 +186,9 @@ def main():
             modules=modules,
             provenance=True,
             fwkJobReport=True,
-            maxEntries=maxEntries,
-            jsonInput=jsons[options['year']])
+            maxEntries=maxEntries
+        )
+    
     p.run()
 
     addDatasetTag()
