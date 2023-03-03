@@ -113,43 +113,11 @@ def main():
                                 )
         if options['year'] == '2016':
             pu_modules = [puAutoWeight_2016()]
-            pref_modules = [
-                            PrefCorr(
-                                    jetroot="L1prefiring_jetpt_2016BtoH.root",
-                                    jetmapname="L1prefiring_jetpt_2016BtoH",
-                                    photonroot="L1prefiring_photonpt_2016BtoH.root",
-                                    photonmapname="L1prefiring_photonpt_2016BtoH",
-                                    branchnames=["PrefireWeight","PrefireWeight_Up", "PrefireWeight_Down"]
-                                    ),
-                            PrefCorr(
-                                    jetroot="L1prefiring_jetempt_2016BtoH.root",
-                                    jetmapname="L1prefiring_jetempt_2016BtoH",
-                                    photonroot="L1prefiring_photonpt_2016BtoH.root",
-                                    photonmapname="L1prefiring_photonpt_2016BtoH",
-                                    branchnames=["PrefireWeight_jetem","PrefireWeight_jetem_Up", "PrefireWeight_jetem_Down"]
-                                    )
-                            ]
         if options['year'] == '2017':
             pu_modules = [ puAutoWeight_2017() ]
-            pref_modules = [
-                            PrefCorr(
-                                    jetroot="L1PrefiringMaps_UL.root",
-                                    jetmapname="L1prefiring_jetptvseta_UL2017BtoF",
-                                    photonroot="L1PrefiringMaps_UL.root",
-                                    photonmapname="L1prefiring_photonptvseta_UL2017BtoF",
-                                    branchnames=["PrefireWeight","PrefireWeight_Up", "PrefireWeight_Down"]
-                                    ),
-                            PrefCorr(
-                                    jetroot="L1PrefiringMaps_UL.root",
-                                    jetmapname="L1prefiring_jetemptvseta_UL2017BtoF",
-                                    photonroot="L1PrefiringMaps_UL.root",
-                                    photonmapname="L1prefiring_photonptvseta_UL2017BtoF",
-                                    branchnames=["PrefireWeight_jetem","PrefireWeight_jetem_Up", "PrefireWeight_jetem_Down"]
-                                    )
-                            ]
         elif options['year'] == '2018':
             pu_modules = [ puAutoWeight_2018() ]
-            pref_modules = []
+        pref_modules = []
 
         modules = jme_modules + pu_modules + pref_modules + selectors + mc_selectors
         p = PostProcessor(
@@ -193,7 +161,7 @@ def main():
 
     addDatasetTag()
 
-    print "DONE"
+    print("DONE")
 
 if __name__ == "__main__":
     main()
