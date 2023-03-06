@@ -68,7 +68,7 @@ def determine_year(dataset):
 
 def short_name(dataset):
     _, name, conditions, _ = dataset.split("/")
-
+    is_mc = dataset.endswith("SIM") or "13TeV" in dataset
     # Remove useless info
     name = name.replace("_TuneCP5","")
     name = name.replace("_TuneCUETP8M1","")
@@ -78,32 +78,30 @@ def short_name(dataset):
     name = name.replace("madgraph","mg")
     name = name.replace("amcnloFXFX","FXFX")
     name = name.replace("powheg","pow")
-
     # Detect extension
     m=re.match(r".*(ext\d+).*",conditions)
     if m:
         name = name + "_" + m.groups()[0]
-    m=re.match(r".*(ver\d+).*",conditions)
-    if m:
-        name = name + "_" + m.groups()[0]
-    if 'new_pmx' in conditions:
-        name = name + '_new_pmx'
-    if ('RunIISummer16' in conditions) or ("UL16" in conditions) or ("2016" in conditions):
-        name = name + "_2016"
-    elif ("RunIIFall17" in conditions) or ("UL17" in conditions) or ("2017" in conditions):
-        name = name + "_2017"
-    elif ('RunIIAutumn18' in conditions) or ("UL18" in conditions) or ("2018" in conditions):
-        name = name + "_2018"
-
-    m = re.match(r"Run(\d+[A-Z]*)", conditions)
-    if m:
-        run = m.groups()[0]
-
-        m = re.match(".*-v(\d+)", conditions)
+    if is_mc:
+        m=re.match(r".*(ver\d+).*",conditions)
         if m:
-            name = name + "_ver{0}".format(m.groups()[0])
-        
-        name = name + "_" + run
+            name = name + "_" + m.groups()[0]
+        if 'new_pmx' in conditions:
+            name = name + '_new_pmx'
+        if ('RunIISummer16' in conditions) or ("UL16" in conditions) or ("2016" in conditions):
+            name = name + "_2016"
+        elif ("RunIIFall17" in conditions) or ("UL17" in conditions) or ("2017" in conditions):
+            name = name + "_2017"
+        elif ('RunIIAutumn18' in conditions) or ("UL18" in conditions) or ("2018" in conditions):
+            name = name + "_2018"
+    else:
+        m = re.match(r".*(201\d[A-Z]*)", conditions)
+        if m:
+            run = m.groups()[0]
+            m = re.match(".*ver(\d+)", conditions)
+            if m:
+                name = name + "_ver{0}".format(m.groups()[0])
+            name = name + "_" + run
     return name
 
 # Define the tag for this submission
