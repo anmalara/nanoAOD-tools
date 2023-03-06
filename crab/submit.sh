@@ -6,7 +6,7 @@ submit_dataset_list(){
     sed -i  -e '$a\' ${LIST}
     touch $SUBMITFILE
     while read DS; do
-        echo $DS
+        # echo $DS
         if [[ $DS = \#* ]]; then
             continue
         elif [ -z "${DS}" ]; then
@@ -14,9 +14,10 @@ submit_dataset_list(){
         fi
 
         if [ $(grep -c "$DS" $SUBMITFILE) -gt 0 ]; then
-            # echo "Dataset was already submitted. Skipping $DS."
+            echo "Dataset was already submitted. Skipping $DS."
             continue
         fi
+        echo "submitting" $DS
         crab submit crab_cfg.py Data.inputDataset=${DS}
         code=$?
         if [ $code -eq 0 ]; then
